@@ -5,7 +5,10 @@
  */
 package model;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -108,7 +111,30 @@ public class Book {
 	}
 	public void changeBookInfo() throws Exception{
 		Scanner input = new Scanner(System.in);
-			
+		String choice;
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Update Author ? (Y/N)");
+		choice = input.nextLine();
+		if(choice.equals("Y") || choice.equals("y")) {
+			System.out.println("Enter New Author: ");
+			setAuthor(reader.readLine());
+		}
+		System.out.println("Update Subject ? (Y/N)");
+		choice = input.nextLine();
+		if(choice.equals("Y") || choice.equals("y")) {
+			System.out.println("Enter New Subject: ");
+			setSubject(reader.readLine());
+		}
+		System.out.println("Update Title ? (Y/N)");
+		choice = input.nextLine();
+		if(choice.equals("Y") || choice.equals("y")) {
+			System.out.println("Enter New Title: ");
+			setTitle(reader.readLine());
+		}
+		System.out.println("Books is successfully updated");
 	}
-	
+	public void placeBookOnHold(Borrower borrower) {
+		HoldRequest hr = new HoldRequest(borrower, this, new Date());
+		
+	}
 }

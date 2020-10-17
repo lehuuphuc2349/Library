@@ -30,6 +30,8 @@ public class Borrower extends Person{
 	@Override
 	public void PrintInfo() {
 		super.PrintInfo(); //To change body of generated methods, choose Tools | Templates.
+		PrintBorrowedBooks();
+		PrintOnHoldBooks();
 		
 	}
 	public void PrintBorrowedBooks() {
