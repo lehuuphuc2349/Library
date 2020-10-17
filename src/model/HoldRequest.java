@@ -49,6 +49,6 @@ public class HoldRequest {
 		this.reqDate = reqDate;
 	}
 	public void Print() {
-		System.out.println(book.getTitle() + "\t\t\t" + borrower.getName() + "\t\t\t" + reqDate);
+		System.out.println(book.getTitle() + "\t\t\t" + "\t\t\t" + reqDate);
 	}
 }

@@ -6,6 +6,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -104,6 +105,10 @@ public class Book {
 //	Print Info Books
 	public void PrintInfoBooks() {
 		System.out.println(title + "\t\t\t" + author + "\t\t\t" + subject);
+	}
+	public void changeBookInfo() throws Exception{
+		Scanner input = new Scanner(System.in);
+			
 	}
 	
 }
