@@ -182,7 +182,10 @@ public class Book {
 
 			long days = ChronoUnit.DAYS.between(today.toInstant(), hr.getReqDate().toInstant());
 			days = 0 - days;
-//			Resume Function
+			if(days > Library.getInstace().getHoldRequestExpiry()) {
+				removeHoldRequest();
+				hr.getBorrower().RemoveHoldRequest(hr);
+			}
 		}
 		if (isIssued) {
 			System.out.println("The book: " + title + " is already issued.");
