@@ -5,7 +5,6 @@
         <group>
             <file>file:/Users/OneShop/NetBeansProjects/LibraryJDBC/src/model/Book.java</file>
             <file>file:/Users/OneShop/NetBeansProjects/LibraryJDBC/src/model/HoldRequest.java</file>
-            <file>file:/Users/OneShop/NetBeansProjects/LibraryJDBC/src/model/Library.java</file>
             <file>file:/Users/OneShop/NetBeansProjects/LibraryJDBC/src/model/Borrower.java</file>
             <file>file:/Users/OneShop/NetBeansProjects/LibraryJDBC/src/model/Loan.java</file>
         </group>
