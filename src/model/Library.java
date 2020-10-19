@@ -13,6 +13,7 @@ import java.util.Scanner;
  * @author Phucdz
  */
 public class Library {
+
 	private String name;
 	private Librian librian;
 	private ArrayList<Person> persons;
@@ -21,14 +22,13 @@ public class Library {
 	public int bookReturnDeadLine;
 	public double perDayFine;
 	public int HoldRequestExpiry;
-	
+
 	private static Library obj;
-	
-	
+
 	public static Library getInstace() {
-		if(obj == null) {
+		if (obj == null) {
 			obj = new Library();
-		} 
+		}
 		return obj;
 	}
 
@@ -50,9 +50,8 @@ public class Library {
 		this.perDayFine = perDayFine;
 		this.HoldRequestExpiry = HoldRequestExpiry;
 	}
-	
-//	Getter Setter
 
+//	Getter Setter
 	public String getName() {
 		return name;
 	}
@@ -124,68 +123,85 @@ public class Library {
 	public static void setObj(Library obj) {
 		Library.obj = obj;
 	}
-	
-	
+
 //	Adding all People in Library
 	public boolean addLibrian(Librian lib) {
-		if(librian == null) {
+		if (librian == null) {
 			librian = lib;
 			persons.add(lib);
 			return true;
-		} else 
+		} else {
 			System.out.println("Sorry, the library already has one librian. New Librarian can't be created");
+		}
 		return false;
 	}
-	
+
 	public void addClerk(Clerk clerk) {
 		persons.add(clerk);
 	}
+
 	public void addBorrwer(Borrower borrower) {
 		persons.add(borrower);
 	}
+
 	public void addLoans(Loan loan) {
 		loans.add(loan);
 	}
 //	Finding People in Library
+
 	public Borrower findBorrower() {
 		System.out.println("Enter Borrwer's ID: ");
 		int id = 0;
 		Scanner input = new Scanner(System.in);
 		try {
 			id = input.nextInt();
-			
-		} catch(java.util.InputMismatchException e) {
+
+		} catch (java.util.InputMismatchException e) {
 			System.out.println(e);
-		} 
-		for(int i = 0; i < persons.size(); i++) {
-			if(persons.get(id).getId() == id && persons.get(id).getClass().getSimpleName().equals("Borrwer"));
+		}
+		for (int i = 0; i < persons.size(); i++) {
+			if (persons.get(id).getId() == id && persons.get(id).getClass().getSimpleName().equals("Borrwer"));
 			return (Borrower) persons.get(i);
 		}
 		System.out.println("Sorry this ID did't match any Borrower's ID");
 		return null;
 	}
+
 	public Clerk findClerk() {
 		System.out.println("Enter Clerk's ID: ");
 		int id = 0;
 		Scanner input = new Scanner(System.in);
 		try {
 			id = input.nextInt();
-		} catch(java.util.InputMismatchException e) {
+		} catch (java.util.InputMismatchException e) {
 			System.out.println(e);
 		}
-		for(int i = 0; i < persons.size(); i++) {
-			if(persons.get(i).getId() == id && persons.get(id).getClass().getSimpleName().equals("Clerk"));
+		for (int i = 0; i < persons.size(); i++) {
+			if (persons.get(i).getId() == id && persons.get(id).getClass().getSimpleName().equals("Clerk"));
 			return (Clerk) persons.get(i);
 		}
 		System.out.println("Sorry this ID didn't match any Clerk's ID");
 		return null;
 	}
 //	Book In Library
+
 	public void addBookInLibrary(Book b) {
 		booksInLibrary.add(b);
 	}
+
 	public void removeBookFromLibrary(Book b) {
 		boolean delete = true;
+		for (int i = 0; i < persons.size() && delete; i++) {
+			if (persons.get(i).getClass().getSimpleName().equals("Borrwer")) {
+				ArrayList<Loan> borBooks = ((Borrower) (persons.get(i))).getBorrowedBooks();
+				for(int j = 0; j < borBooks.size() && delete; j++) {
+					if(borBooks.get(j).getBook() == b) {
+						delete = false;
+						System.out.println("This particular book is currently borrweed by some borrwer");
+					}
+				}
+			}
+		}
 	}
 
 }
