@@ -20,6 +20,9 @@ public class Librian extends Staff{
 		this.officeNumber = officeNumber;
 	}
 
+	Librian(int i, String name, String address, int phone, double salary, int i0) {
+	}
+
 	@Override
 	public void PrintInfo() {
 		super.PrintInfo(); //To change body of generated methods, choose Tools | Templates.

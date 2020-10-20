@@ -20,6 +20,9 @@ public class Clerk extends Staff{
 		this.deskNumber = deskNumber;
 	}
 
+	Clerk(int id, String name, String address, int phone, double salary, int dk) {
+	}
+
 	@Override
 	public void PrintInfo() {
 		super.PrintInfo(); //To change body of generated methods, choose Tools | Templates.

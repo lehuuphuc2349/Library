@@ -27,6 +27,9 @@ public class Borrower extends Person{
 		onHoldRequests = new ArrayList();
 	}
 
+	Borrower(int i, String name, String address, int phone) {
+	}
+
 	@Override
 	public void PrintInfo() {
 		super.PrintInfo(); //To change body of generated methods, choose Tools | Templates.

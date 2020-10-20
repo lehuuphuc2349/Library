@@ -6,6 +6,7 @@
 package model;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -264,32 +265,36 @@ public class Library {
 				break;
 			default:
 				System.out.println("Enter the Author of Book");
-				{
+				 {
 					author = reader.readLine();
-				}	break;
+				}
+				break;
 		}
 		ArrayList<Book> matchedBooks = new ArrayList();
-		for(int i = 0; i < booksInLibrary.size(); i++) {
+		for (int i = 0; i < booksInLibrary.size(); i++) {
 			Book b = booksInLibrary.get(i);
 			switch (choice) {
 				case "1":
-					if(b.getTitle().equals(title)) {
+					if (b.getTitle().equals(title)) {
 						matchedBooks.add(b);
-					}	break;
+					}
+					break;
 				case "2":
-					if(b.getSubject().equals(subject)) {
+					if (b.getSubject().equals(subject)) {
 						matchedBooks.add(b);
-					}	break;
+					}
+					break;
 				default:
-					if(b.getAuthor().equals(author)) {
+					if (b.getAuthor().equals(author)) {
 						matchedBooks.add(b);
-					}	break;
+					}
+					break;
 			}
 		}
-		if(!matchedBooks.isEmpty()) {
+		if (!matchedBooks.isEmpty()) {
 			System.out.println("The books are found");
 			System.out.println("No.\t\tTitle\t\tAuthor\t\tSubject");
-			for(int i = 0; i < matchedBooks.size(); i++) {
+			for (int i = 0; i < matchedBooks.size(); i++) {
 				System.out.print(i + "-" + "\t\t");
 				matchedBooks.get(i).PrintInfoBooks();
 				System.out.println("");
@@ -298,15 +303,16 @@ public class Library {
 		} else {
 			System.out.println("Sorry. No Books were found related to your empty");
 			return null;
-			
+
 		}
 	}
 //	View Info All Book
+
 	public void viewALLBooks() {
-		if(!booksInLibrary.isEmpty()) {
+		if (!booksInLibrary.isEmpty()) {
 			System.out.println("Book are: ");
 			System.out.println("No.\t\tTitle\t\tAuthor\t\tSubject");
-			for(int i = 0; i < booksInLibrary.size(); i++) {
+			for (int i = 0; i < booksInLibrary.size(); i++) {
 				System.out.print(i + "-" + "\t\t");
 				booksInLibrary.get(i).PrintInfoBooks();
 				System.out.println("");
@@ -315,6 +321,145 @@ public class Library {
 			System.out.println("Currently, Library has no books");
 		}
 	}
-	
+//	Create Person
 
+	public void createPerson(char x) {
+		Scanner input = new Scanner(System.in);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Enter name");
+		String name = "";
+		try {
+			name = reader.readLine();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		System.out.println("Enter Address");
+		String address = "";
+		try {
+			address = reader.readLine();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		System.out.println("Enter Phone");
+		int phone = 0;
+		try {
+			phone = input.nextInt();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+//		Cleark
+		switch (x) {
+			case 'c': {
+				double salary = 0;
+				try {
+					System.out.println("Enter Salary");
+					salary = input.nextDouble();
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+				Clerk c = new Clerk(-1, name, address, phone, salary, -1);
+				addClerk(c);
+				System.out.println("Clerk With Name: " + name + " created successfully");
+				System.out.println("Your ID: " + c.getId());
+				System.out.println("Your password is: " + c.getPassword());
+				break;
+			}
+			case 'l': {
+				double salary = 0;
+				try {
+					System.out.println("Enter Salary");
+					salary = input.nextDouble();
+				} catch (Exception e) {
+					System.out.println(e);
+				}
+				Librian l = new Librian(-1, name, address, phone, salary, -1);
+				if (addLibrian(l)) {
+					System.out.println("Librian With Name: " + name + " created successfully");
+					System.out.println("Your ID: " + l.getId());
+					System.out.println("Your Password: " + l.getPassword());
+				}
+				break;
+			}
+			default:
+				Borrower borrower = new Borrower(-1, name, address, phone);
+				addBorrwer(borrower);
+				System.out.println("Borrwer With Name: " + name);
+				System.out.println("Your ID: " + borrower.getName());
+				System.out.println("Your password: " + borrower.getPassword());
+				break;
+		}
+	}
+//	Compute total Fine for all loans of a borrwer
+
+	public double computeFine(Borrower borrower) {
+		System.out.println("");
+		System.out.println("No.\t\tBook's Title\t\tBorrwer's Name\t\tIssued Date\t\tReturned Date\t\tResult");
+		double totalFine = 0;
+		double perLoanFine = 0;
+		for (int i = 0; i < loans.size(); i++) {
+			Loan l = loans.get(i);
+			perLoanFine = l.computeFine();
+			System.out.print(i + "-" + "\t\t" + loans.get(i).getBook().getTitle() + "\t\t" + loans.get(i).getBorrower().getName() + "\t\t" + loans.get(i).getIssuedDate() + "\t\t" + loans.get(i).getDateReturned() + "\t\t" + perLoanFine + "\n");
+			totalFine += perLoanFine;
+		}
+		return totalFine;
+	}
+//	Create Book
+
+	public void createBook(String title, String subject, String author) {
+		Book b = new Book(-1, title, subject, author, false);
+		addBookInLibrary(b);
+		System.out.println("Book with Title " + b.getTitle() + " is successfully created");
+	}
+//	Login
+
+	public Person Login() {
+		Scanner input = new Scanner(System.in);
+		int id = 0;
+		String password = "";
+		System.out.println("Enter ID: ");
+		try {
+			id = input.nextInt();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		System.out.println("Enter password");
+		password = input.nextLine();
+		for (int i = 0; i < persons.size(); i++) {
+			if (persons.get(i).getId() == id && persons.get(i).getPassword().equals(password)) {
+				System.out.println("Login Successfully");
+				return persons.get(i);
+			}
+		}
+		if (librian != null) {
+			if (librian.getId() == id && librian.getPassword().equals(password)) {
+				System.out.println("Login successfully");
+				return librian;
+			}
+		}
+		System.out.println("Sorry!, Wrong ID or Password");
+		return null;
+	}
+//	View History
+
+	public void viewHistory() {
+		if (!loans.isEmpty()) {
+			System.out.println("Issued Book are: ");
+			System.out.println("No.\t\tTitle\t\tBorrwer's Name\t\tIssuer's Name\t\tIssued Date\t\tReceiver's Name\t\tReturned Date\t\tFine Paid");
+
+			for (int i = 0; i < loans.size(); i++) {
+				if (loans.get(i).getIssuer() != null) {
+					System.out.println(i + "-" + "\t" + loans.get(i).getBook().getTitle() + "\t\t" + loans.get(i).getBorrower().getName() + "\t\t" + loans.get(i).getIssuer().getName() + loans.get(i).getIssuedDate());
+				}
+				if (loans.get(i).getReceiver() != null) {
+					System.out.println("\t" + loans.get(i).getReceiver().getName() + "\t\t" + loans.get(i).getDateReturned() + "\t\t" + loans.get(i).getFinePaid());
+				} else {
+					System.out.println("\t\t" + "--" + "\t\t\t" + "--" + "\t\t" + "--");
+
+				}
+			}
+		} else {
+			System.out.println("No issued Books");
+		}
+	}
 }
