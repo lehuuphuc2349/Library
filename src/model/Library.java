@@ -5,6 +5,8 @@
  */
 package model;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -212,21 +214,20 @@ public class Library {
 				while (true) {
 					String choice = input.nextLine();
 					if (choice.equals("Y") || choice.equals("y") || choice.equals("N") || choice.equals("n")) {
-						if(choice.equals("N") || choice.equals("n")) {
+						if (choice.equals("N") || choice.equals("n")) {
 							System.out.println("Delete Successfully");
 							return;
-						}
-						else {
-							for(int i = 0; i < hRequests.size(); i++) {
+						} else {
+							for (int i = 0; i < hRequests.size(); i++) {
 								HoldRequest hr = hRequests.get(i);
 								hr.getBorrower().RemoveHoldRequest(hr);
 								b.removeHoldRequest();
 							}
 						}
-					}  else {
+					} else {
 						System.out.println("Invalid Input. Enter (Y/N)");
 					}
-				} 
+				}
 			} else {
 				System.out.println("This book has no hold requests");
 				booksInLibrary.remove(b);
@@ -236,5 +237,84 @@ public class Library {
 			System.out.println("Delete Unsuccessful");
 		}
 	}
+//	Searching Books
+
+	public ArrayList<Book> searchForBooks() throws Exception {
+		String choice;
+		String title = "", subject = "", author = "";
+		Scanner input = new Scanner(System.in);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		while (true) {
+			System.out.println("Enter either '1', '2' or '3' for search by Title, Subject, Author of book respectively");
+			choice = input.nextLine();
+			if (choice.equals("1") || choice.equals("2") || choice.equals("3")) {
+				break;
+			} else {
+				System.out.println("Wrong Input");
+			}
+		}
+		switch (choice) {
+			case "1":
+				System.out.println("Enter the Title of book");
+				title = reader.readLine();
+				break;
+			case "2":
+				System.out.println("Enter the Subject of Book");
+				subject = reader.readLine();
+				break;
+			default:
+				System.out.println("Enter the Author of Book");
+				{
+					author = reader.readLine();
+				}	break;
+		}
+		ArrayList<Book> matchedBooks = new ArrayList();
+		for(int i = 0; i < booksInLibrary.size(); i++) {
+			Book b = booksInLibrary.get(i);
+			switch (choice) {
+				case "1":
+					if(b.getTitle().equals(title)) {
+						matchedBooks.add(b);
+					}	break;
+				case "2":
+					if(b.getSubject().equals(subject)) {
+						matchedBooks.add(b);
+					}	break;
+				default:
+					if(b.getAuthor().equals(author)) {
+						matchedBooks.add(b);
+					}	break;
+			}
+		}
+		if(!matchedBooks.isEmpty()) {
+			System.out.println("The books are found");
+			System.out.println("No.\t\tTitle\t\tAuthor\t\tSubject");
+			for(int i = 0; i < matchedBooks.size(); i++) {
+				System.out.print(i + "-" + "\t\t");
+				matchedBooks.get(i).PrintInfoBooks();
+				System.out.println("");
+			}
+			return matchedBooks;
+		} else {
+			System.out.println("Sorry. No Books were found related to your empty");
+			return null;
+			
+		}
+	}
+//	View Info All Book
+	public void viewALLBooks() {
+		if(!booksInLibrary.isEmpty()) {
+			System.out.println("Book are: ");
+			System.out.println("No.\t\tTitle\t\tAuthor\t\tSubject");
+			for(int i = 0; i < booksInLibrary.size(); i++) {
+				System.out.print(i + "-" + "\t\t");
+				booksInLibrary.get(i).PrintInfoBooks();
+				System.out.println("");
+			}
+		} else {
+			System.out.println("Currently, Library has no books");
+		}
+	}
+	
 
 }
