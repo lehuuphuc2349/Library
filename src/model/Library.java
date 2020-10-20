@@ -194,13 +194,46 @@ public class Library {
 		for (int i = 0; i < persons.size() && delete; i++) {
 			if (persons.get(i).getClass().getSimpleName().equals("Borrwer")) {
 				ArrayList<Loan> borBooks = ((Borrower) (persons.get(i))).getBorrowedBooks();
-				for(int j = 0; j < borBooks.size() && delete; j++) {
-					if(borBooks.get(j).getBook() == b) {
+				for (int j = 0; j < borBooks.size() && delete; j++) {
+					if (borBooks.get(j).getBook() == b) {
 						delete = false;
 						System.out.println("This particular book is currently borrweed by some borrwer");
 					}
 				}
 			}
+		}
+		if (delete) {
+			System.out.println("Currently this book is not borrowed by anyone");
+			ArrayList<HoldRequest> hRequests = b.getHoldRequests();
+			if (!hRequests.isEmpty()) {
+				System.out.println("This book might be on hold request by some borrowers. Deleting this book will delete the relevant hold request too.");
+				System.out.println("Do you still want to delete the book ? (Y/N)");
+				Scanner input = new Scanner(System.in);
+				while (true) {
+					String choice = input.nextLine();
+					if (choice.equals("Y") || choice.equals("y") || choice.equals("N") || choice.equals("n")) {
+						if(choice.equals("N") || choice.equals("n")) {
+							System.out.println("Delete Successfully");
+							return;
+						}
+						else {
+							for(int i = 0; i < hRequests.size(); i++) {
+								HoldRequest hr = hRequests.get(i);
+								hr.getBorrower().RemoveHoldRequest(hr);
+								b.removeHoldRequest();
+							}
+						}
+					}  else {
+						System.out.println("Invalid Input. Enter (Y/N)");
+					}
+				} 
+			} else {
+				System.out.println("This book has no hold requests");
+				booksInLibrary.remove(b);
+				System.out.println("The book is successfully removed");
+			}
+		} else {
+			System.out.println("Delete Unsuccessful");
 		}
 	}
 
