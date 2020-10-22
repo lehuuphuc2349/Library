@@ -93,7 +93,7 @@ public class Borrower extends Person{
 	public void RemoveBorrwedBook(Loan book){
 		borrowedBooks.remove(book);
 	}	
-	public void AddHoleRequest(HoldRequest hr) {
+	public void AddHoldRequest(HoldRequest hr) {
 		onHoldRequests.add(hr);
 	}
 	public void RemoveHoldRequest(HoldRequest hr) {

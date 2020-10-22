@@ -13,9 +13,11 @@ import java.util.ArrayList;
 import model.Book;
 import model.Borrower;
 import model.Clerk;
+import model.HoldRequest;
 import model.Library;
 import model.Librian;
 import model.Loan;
+import model.Person;
 import model.Staff;
 
 /**
@@ -176,16 +178,53 @@ public class Manager {
 				}
 				set = true;
 				ArrayList<Book> books = library.getBooksInLibrary();
-				
+
 				for (int k = 0; k < library.getBooksInLibrary().size() && set; k++) {
 					if (books.get(k).getBookID() == bookID) {
 						set = false;
-						Loan loan = new Loan(bb,books.get(k),idate,rdate,staff[0],staff[1],fineStatus);
-						
+						Loan loan = new Loan(bb, books.get(k), idate, rdate, staff[0], staff[1], fineStatus);
+						ArrayList<Loan> loans = library.getLoans();
+						loans.add(loan);
+
 					}
 				}
 
 			} while (result.next());
+		}
+	}
+	public void ShowHoldBooks(Library library) throws Exception {
+		Connection connection = controller.ConnectMySQL.ConnectMySQLSever();
+		String query = "Select * from HOLDBOOKS";
+		Statement statement = connection.createStatement();
+		ResultSet result = statement.executeQuery(query);
+		if(!result.next()) {
+			System.out.println("No Books On Hold");
+		} else {
+			do {
+				int borrID = result.getInt("BORROWER");
+				int bookID = result.getInt("BOOK");
+				Date off = new Date(result.getDate("REQ_DATE").getTime());
+				boolean set = true;
+				Borrower borrower = null;
+				ArrayList<Person> persons = library.getPersons();
+				for(int i =0 ; i <persons.size() && set ; i++) {
+					if(persons.get(i).getId() == borrID) {
+						set = false;
+						borrower = (Borrower) persons.get(i);
+					}
+				}
+				set = true;
+				ArrayList<Book> books = library.getBooksInLibrary();
+				for(int i = 0; i < books.size() && set; i++) {
+					if(books.get(i).getBookID() == bookID) {
+						set = false;
+						HoldRequest holdBook = new HoldRequest(borrower,books.get(i),off);
+						books.get(i).addHoldRequest(holdBook);
+						borrower.AddHoldRequest(holdBook);
+						
+					}
+				}
+			}while(result.next());
 		}
 	}
 }

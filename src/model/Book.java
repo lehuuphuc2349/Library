@@ -144,7 +144,7 @@ public class Book {
 		HoldRequest hr = new HoldRequest(borrower, this, new Date());
 
 		addHoldRequest(hr);
-		borrower.AddHoleRequest(hr);
+		borrower.AddHoldRequest(hr);
 		System.out.println("The book " + title + " has been successfully placed on hold by borrower " + borrower.getName());
 	}
 
