@@ -261,5 +261,13 @@ public class Manager {
 				}
 			}while(result.next());
 		}
+		ArrayList<Person> persons = library.getPersons();
+		int max = 0;
+		for(int i = 0; i < persons.size(); i++) {
+			if(max < persons.get(i).getId()) {
+				max = persons.get(i).getId();
+			}
+		}
 	}
+
 }
