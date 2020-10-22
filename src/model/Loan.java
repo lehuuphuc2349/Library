@@ -35,6 +35,9 @@ public class Loan {
 		this.finePaid = finePaid;
 	}
 
+	public Loan(Borrower bb, Book get, java.sql.Date idate, java.sql.Date rdate, Staff staff, Staff staff0, boolean fineStatus) {
+	}
+
 	public Borrower getBorrower() {
 		return borrower;
 	}

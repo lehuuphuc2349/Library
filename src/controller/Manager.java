@@ -6,20 +6,24 @@
 package controller;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import model.Book;
 import model.Borrower;
 import model.Clerk;
 import model.Library;
 import model.Librian;
+import model.Loan;
+import model.Staff;
 
 /**
  *
  * @author Phucdz
  */
 public class Manager {
-//	Search 
+//	Show 
 
 	public void showBook(Library library) throws Exception {
 		Connection connection = controller.ConnectMySQL.ConnectMySQLSever();
@@ -84,30 +88,104 @@ public class Manager {
 				int phone = result.getInt("PHONE");
 				double salary = result.getDouble("SALARY");
 				int officeno = result.getInt("OFFICENO");
-				Librian librian = new Librian(officeno, salary, id, phone, name, address, address);	
+				Librian librian = new Librian(officeno, salary, id, phone, name, address, address);
 				library.addLibrian(librian);
-				
+
 			} while (result.next());
 		}
 	}
+
 	public void showBorrwer(Library library) throws Exception {
 		Connection connection = controller.ConnectMySQL.ConnectMySQLSever();
-		String query =	"Select ID,PNAME,ADDRESS,PASSWORD,PHONENO FROM PERSON INNER JOIN BORROWER ON ID = B_ID";
+		String query = "Select ID,PNAME,ADDRESS,PASSWORD,PHONENO FROM PERSON INNER JOIN BORROWER ON ID = B_ID";
 		Statement statement = connection.createStatement();
 		ResultSet result = statement.executeQuery(query);
-		if(!result.next()) {
+		if (!result.next()) {
 			System.out.println("No Borrwer Found In Library");
 		} else {
 			do {
 				int id = result.getInt("ID");
 				String name = result.getString("PNAME");
-				String address= result.getString("ADDRESS");
+				String address = result.getString("ADDRESS");
 				int phone = result.getInt("PHONENO");
 				Borrower borrower = new Borrower(id, phone, name, address, address);
 				library.addBorrwer(borrower);
+
+			} while (result.next());
+		}
+	}
+
+	public void showLoans(Library library) throws Exception {
+		Connection connection = controller.ConnectMySQL.ConnectMySQLSever();
+		String query = "Select * from Loans";
+		Statement statement = connection.createStatement();
+		ResultSet result = statement.executeQuery(query);
+		if (!result.next()) {
+			System.out.println("No Loans Found In Library");
+		} else {
+			do {
+				int borrID = result.getInt("BORROWER");
+				int bookID = result.getInt("BOOK");
+				int issueID = result.getInt("ISSUER");
+				Integer receiID = (Integer) result.getObject("RECEIVER");
+				int rd = 0;
+				Date rdate;
+				Date idate = new Date(result.getTimestamp("ISS_DATE").getTime());
+				if (receiID != null) {
+					rdate = new Date(result.getTimestamp("RET_DATE").getTime());
+					rd = (int) receiID;
+				} else {
+					rdate = null;
+				}
+				boolean fineStatus = result.getBoolean("FINE_PAID");
+				boolean set = true;
+				Borrower bb = null;
+				for (int i = 0; i < library.getPersons().size() && set; i++) {
+					if (library.getPersons().get(i).getId() == borrID) {
+						set = false;
+						bb = (Borrower) (library.getPersons().get(i));
+					}
+				}
+				set = true;
+				Staff staff[] = new Staff[2];
+				if (issueID == library.getLibrian().getId()) {
+					staff[0] = library.getLibrian();
+				} else {
+					for (int k = 0; k < library.getPersons().size() && set; k++) {
+						if (library.getPersons().get(k).getId() == issueID && library.getPersons().get(k).getClass().getSimpleName().equals("Clerk")) {
+							set = false;
+							staff[0] = (Clerk) (library.getPersons().get(k));
+						}
+					}
+				}
+				set = true;
+				if (receiID == null) {
+					staff[1] = null;
+					rdate = null;
+				} else {
+					if (rd == library.getLibrian().getId()) {
+						staff[1] = library.getLibrian();
+					} else {
+						for (int k = 0; k < library.getPersons().size() && set; k++) {
+							if (library.getPersons().get(k).getId() == rd && library.getPersons().get(k).getClass().getSimpleName().equals("Clerk")) {
+								set = false;
+								staff[1] = (Clerk) library.getPersons().get(k);
+							}
+						}
+					}
+				}
+				set = true;
+				ArrayList<Book> books = library.getBooksInLibrary();
 				
-			}while(result.next());
+				for (int k = 0; k < library.getBooksInLibrary().size() && set; k++) {
+					if (books.get(k).getBookID() == bookID) {
+						set = false;
+						Loan loan = new Loan(bb,books.get(k),idate,rdate,staff[0],staff[1],fineStatus);
+						
+					}
+				}
+
+			} while (result.next());
 		}
 	}
 }
-
