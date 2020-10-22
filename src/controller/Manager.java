@@ -7,6 +7,7 @@ package controller;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -268,6 +269,26 @@ public class Manager {
 				max = persons.get(i).getId();
 			}
 		}
+	}
+	public void fillBackConnection(Library library) throws Exception {
+		
+//		LOAN TABLE CLEARED
+		Connection connection = controller.ConnectMySQL.ConnectMySQLSever();
+		String query = "DELETE FROM LIBRARY.LOANS";
+		PreparedStatement preparedStatement = connection.prepareStatement(query);
+		preparedStatement.executeUpdate();
+
+//		BORROWER BOOK TABLE CLEARED
+		
+		query = "DELETE FROM LIBRARY.BORROWED_BOOKS";
+		preparedStatement = connection.prepareStatement(query);
+		preparedStatement.executeUpdate();
+		
+//		ONHOLDBOOKS TABLE CLEARED
+
+		query = "DELETE FROM LIBRARY.ON_HOLD_BOOKS";
+		preparedStatement = connection.prepareStatement(query);
+		preparedStatement.executeUpdate();
 	}
 
 }
