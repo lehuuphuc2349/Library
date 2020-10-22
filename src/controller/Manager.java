@@ -227,4 +227,39 @@ public class Manager {
 			}while(result.next());
 		}
 	}
+	public void ShowBorrowerInfo(Library library) throws Exception {
+		Connection connection = controller.ConnectMySQL.ConnectMySQLSever();
+		String query = "Select ID, BOOK FROM PERSON INNER JOIN BORROWER ON ID = B_ID INNER JOIN BORROWED_BOOK ON B_ID = BORROWER";
+		Statement statement = connection.createStatement();
+		ResultSet result = statement.executeQuery(query);
+		if(!result.next()) {
+			System.out.println("No Borrwer has borrowed book yet from library");
+			
+		} else {
+			do {
+				int id = result.getInt("ID");
+				int bookID = result.getInt("BOOK");
+				Borrower borrwer = null;
+				boolean set = true;
+				boolean okay = true;
+				for(int i = 0; i < library.getPersons().size() && set; i++) {
+					if(library.getPersons().get(i).getClass().getSimpleName().equals("BORROWER")) {
+						if(library.getPersons().get(i).getId() == id) {
+							set = false;
+							borrwer = (Borrower) library.getPersons().get(i);
+						}
+					}
+				}
+				set = true;
+				ArrayList<Loan> books = library.getLoans();
+				for(int i = 0; i < books.size() && set; i++) {
+					if(books.get(i).getBook().getBookID() == bookID && books.get(i).getReceiver() == null) {
+						set = false;
+						Loan bBook = new Loan(borrwer,books.get(i).getBook(), books.get(i).getIssuer(),null, books.get(i).getIssuedDate(),null,books.get(i).getFinePaid());
+						borrwer.AddBorrwedBook(bBook);
+					}
+				}
+			}while(result.next());
+		}
+	}
 }
