@@ -286,9 +286,42 @@ public class Manager {
 		
 //		ONHOLDBOOKS TABLE CLEARED
 
-		query = "D	ELETE FROM LIBRARY.ON_HOLD_BOOKS";
+		query = "DELETE FROM LIBRARY.ON_HOLD_BOOKS";
 		preparedStatement = connection.prepareStatement(query);
 		preparedStatement.executeUpdate();
+		
+//		BOOK TABLE CLEARED
+		query = "DELETE FROM LIBRARY.BOOK";
+		preparedStatement = connection.prepareStatement(query);
+		preparedStatement.executeUpdate();
+		
+//		CLERK TABLE CLEARED
+		query = "DELETE FROM LIBRARY.CLERK";
+		preparedStatement = connection.prepareStatement(query);
+		preparedStatement.executeUpdate();
+		
+//		LIBRARIAN TABLE CLEARED
+		query = "DELETE FROM LIBRARY.LIBRARIAN";
+		preparedStatement = connection.prepareStatement(query);
+		preparedStatement.executeUpdate();
+		
+//		BORROWER TABLE CLEARED
+		query = "DELETE FROM LIBRARY.BORROWER";
+		preparedStatement = connection.prepareStatement(query);
+		preparedStatement.executeUpdate();
+		
+//		STAFF TABLE CLEARED
+		query = "DELETE FROM LIBRARY.STAFF";
+		preparedStatement = connection.prepareStatement(query);
+		preparedStatement.executeUpdate();
+		
+//		PERSON TABLE CLEARED
+		query = "DELETE FROM LIBRARY.PERSON";
+		preparedStatement = connection.prepareStatement(query);
+		preparedStatement.executeUpdate();
+		
+		
 	}
+	
 
 }	
