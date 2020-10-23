@@ -286,9 +286,9 @@ public class Manager {
 		
 //		ONHOLDBOOKS TABLE CLEARED
 
-		query = "DELETE FROM LIBRARY.ON_HOLD_BOOKS";
+		query = "D	ELETE FROM LIBRARY.ON_HOLD_BOOKS";
 		preparedStatement = connection.prepareStatement(query);
 		preparedStatement.executeUpdate();
 	}
 
-}
+}	
